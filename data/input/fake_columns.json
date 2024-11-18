@@ -1,0 +1,265 @@
+{
+    "tables": [
+      {
+        "table_name": "users",
+        "columns": [
+          { "column_name": "user_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for each user" },
+          { "column_name": "username", "column_type": "VARCHAR(50)", "column_remarks": "Unique username for the user" },
+          { "column_name": "email", "column_type": "VARCHAR(100)", "column_remarks": "Email address of the user" },
+          { "column_name": "password", "column_type": "VARCHAR(255)", "column_remarks": "Hashed password for the user" },
+          { "column_name": "created_at", "column_type": "TIMESTAMP", "column_remarks": "Account creation timestamp" }
+        ],
+        "primary_key": ["user_id"]
+      },
+      {
+        "table_name": "products",
+        "columns": [
+          { "column_name": "product_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for each product" },
+          { "column_name": "product_name", "column_type": "VARCHAR(100)", "column_remarks": "Name of the product" },
+          { "column_name": "description", "column_type": "TEXT", "column_remarks": "Detailed description of the product" },
+          { "column_name": "price", "column_type": "DECIMAL(10,2)", "column_remarks": "Price of the product" },
+          { "column_name": "created_at", "column_type": "TIMESTAMP", "column_remarks": "Product creation timestamp" }
+        ],
+        "primary_key": ["product_id"]
+      },
+      {
+        "table_name": "orders",
+        "columns": [
+          { "column_name": "order_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for each order" },
+          { "column_name": "user_id", "column_type": "INT", "column_remarks": "Foreign Key - Identifier for the user placing the order" },
+          { "column_name": "order_date", "column_type": "TIMESTAMP", "column_remarks": "Date and time of the order" },
+          { "column_name": "total_amount", "column_type": "DECIMAL(10,2)", "column_remarks": "Total order amount" }
+        ],
+        "primary_key": ["order_id"],
+        "foreign_keys": [
+          { "column_name": "user_id", "references_table": "users", "references_column": "user_id" }
+        ]
+      },
+      {
+        "table_name": "order_items",
+        "columns": [
+          { "column_name": "order_item_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for each order item" },
+          { "column_name": "order_id", "column_type": "INT", "column_remarks": "Foreign Key - Identifier for the order" },
+          { "column_name": "product_id", "column_type": "INT", "column_remarks": "Foreign Key - Identifier for the product" },
+          { "column_name": "quantity", "column_type": "INT", "column_remarks": "Quantity of the product ordered" },
+          { "column_name": "subtotal", "column_type": "DECIMAL(10,2)", "column_remarks": "Subtotal for the item" }
+        ],
+        "primary_key": ["order_item_id"],
+        "foreign_keys": [
+          { "column_name": "order_id", "references_table": "orders", "references_column": "order_id" },
+          { "column_name": "product_id", "references_table": "products", "references_column": "product_id" }
+        ]
+      },
+      {
+        "table_name": "categories",
+        "columns": [
+          { "column_name": "category_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for each category" },
+          { "column_name": "category_name", "column_type": "VARCHAR(50)", "column_remarks": "Name of the category" },
+          { "column_name": "description", "column_type": "TEXT", "column_remarks": "Description of the category" }
+        ],
+        "primary_key": ["category_id"]
+      },
+      {
+        "table_name": "product_categories",
+        "columns": [
+          { "column_name": "product_id", "column_type": "INT", "column_remarks": "Foreign Key - Identifier for the product" },
+          { "column_name": "category_id", "column_type": "INT", "column_remarks": "Foreign Key - Identifier for the category" }
+        ],
+        "primary_key": ["product_id", "category_id"],
+        "foreign_keys": [
+          { "column_name": "product_id", "references_table": "products", "references_column": "product_id" },
+          { "column_name": "category_id", "references_table": "categories", "references_column": "category_id" }
+        ]
+      },
+      {
+        "table_name": "addresses",
+        "columns": [
+          { "column_name": "address_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for each address" },
+          { "column_name": "user_id", "column_type": "INT", "column_remarks": "Foreign Key - Identifier for the user" },
+          { "column_name": "street_address", "column_type": "VARCHAR(200)", "column_remarks": "Street address details" },
+          { "column_name": "city", "column_type": "VARCHAR(50)", "column_remarks": "City of the address" },
+          { "column_name": "state", "column_type": "VARCHAR(50)", "column_remarks": "State of the address" },
+          { "column_name": "zip_code", "column_type": "VARCHAR(10)", "column_remarks": "Zip code of the address" }
+        ],
+        "primary_key": ["address_id"],
+        "foreign_keys": [
+          { "column_name": "user_id", "references_table": "users", "references_column": "user_id" }
+        ]
+      },
+      {
+        "table_name": "reviews",
+        "columns": [
+          { "column_name": "review_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for each review" },
+          { "column_name": "user_id", "column_type": "INT", "column_remarks": "Foreign Key - Identifier for the user" },
+          { "column_name": "product_id", "column_type": "INT", "column_remarks": "Foreign Key - Identifier for the product" },
+          { "column_name": "rating", "column_type": "DECIMAL(2,1)", "column_remarks": "Rating provided by the user" },
+          { "column_name": "review_text", "column_type": "TEXT", "column_remarks": "Review content provided by the user" },
+          { "column_name": "created_at", "column_type": "TIMESTAMP", "column_remarks": "Timestamp for the review" }
+        ],
+        "primary_key": ["review_id"],
+        "foreign_keys": [
+          { "column_name": "user_id", "references_table": "users", "references_column": "user_id" },
+          { "column_name": "product_id", "references_table": "products", "references_column": "product_id" }
+        ]
+      },
+      {
+        "table_name": "payment_methods",
+        "columns": [
+          { "column_name": "payment_method_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for each payment method" },
+          { "column_name": "user_id", "column_type": "INT", "column_remarks": "Foreign Key - Identifier for the user" },
+          { "column_name": "card_number", "column_type": "VARCHAR(20)", "column_remarks": "Encrypted credit card number" },
+          { "column_name": "expiry_date", "column_type": "DATE", "column_remarks": "Expiration date of the card" },
+          { "column_name": "billing_address", "column_type": "VARCHAR(200)", "column_remarks": "Billing address for the card" }
+        ],
+        "primary_key": ["payment_method_id"],
+        "foreign_keys": [
+          { "column_name": "user_id", "references_table": "users", "references_column": "user_id" }
+        ]
+      },
+      {
+        "table_name": "inventory",
+        "columns": [
+          { "column_name": "inventory_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for inventory record" },
+          { "column_name": "product_id", "column_type": "INT", "column_remarks": "Foreign Key - Reference to product" },
+          { "column_name": "warehouse_id", "column_type": "INT", "column_remarks": "Foreign Key - Reference to warehouse" },
+          { "column_name": "quantity_available", "column_type": "INT", "column_remarks": "Current available quantity" },
+          { "column_name": "quantity_reserved", "column_type": "INT", "column_remarks": "Quantity reserved for pending orders" },
+          { "column_name": "minimum_threshold", "column_type": "INT", "column_remarks": "Minimum quantity before reorder" },
+          { "column_name": "maximum_capacity", "column_type": "INT", "column_remarks": "Maximum storage capacity" },
+          { "column_name": "last_restock_date", "column_type": "TIMESTAMP", "column_remarks": "Date of last restock" },
+          { "column_name": "next_restock_date", "column_type": "TIMESTAMP", "column_remarks": "Scheduled date for next restock" },
+          { "column_name": "shelf_location", "column_type": "VARCHAR(50)", "column_remarks": "Physical location in warehouse" },
+          { "column_name": "lot_number", "column_type": "VARCHAR(50)", "column_remarks": "Batch/lot number for tracking" },
+          { "column_name": "expiration_date", "column_type": "DATE", "column_remarks": "Expiration date if applicable" },
+          { "column_name": "condition_status", "column_type": "VARCHAR(20)", "column_remarks": "Condition of inventory items" },
+          { "column_name": "last_audit_date", "column_type": "TIMESTAMP", "column_remarks": "Date of last inventory audit" },
+          { "column_name": "notes", "column_type": "TEXT", "column_remarks": "Additional inventory notes" }
+        ],
+        "primary_key": ["inventory_id"],
+        "foreign_keys": [
+          { "column_name": "product_id", "references_table": "products", "references_column": "product_id" },
+          { "column_name": "warehouse_id", "references_table": "warehouses", "references_column": "warehouse_id" }
+        ]
+      },
+      {
+        "table_name": "promotions",
+        "columns": [
+          { "column_name": "promotion_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for promotion" },
+          { "column_name": "promotion_name", "column_type": "VARCHAR(100)", "column_remarks": "Name of the promotion" },
+          { "column_name": "description", "column_type": "TEXT", "column_remarks": "Detailed description of promotion" },
+          { "column_name": "discount_type", "column_type": "VARCHAR(20)", "column_remarks": "Percentage/Fixed Amount/BOGO" },
+          { "column_name": "discount_value", "column_type": "DECIMAL(10,2)", "column_remarks": "Value of the discount" },
+          { "column_name": "minimum_purchase", "column_type": "DECIMAL(10,2)", "column_remarks": "Minimum purchase amount required" },
+          { "column_name": "start_date", "column_type": "TIMESTAMP", "column_remarks": "Start date of promotion" },
+          { "column_name": "end_date", "column_type": "TIMESTAMP", "column_remarks": "End date of promotion" },
+          { "column_name": "usage_limit", "column_type": "INT", "column_remarks": "Maximum number of times promotion can be used" },
+          { "column_name": "current_usage", "column_type": "INT", "column_remarks": "Current number of times promotion has been used" },
+          { "column_name": "is_active", "column_type": "BOOLEAN", "column_remarks": "Whether promotion is currently active" },
+          { "column_name": "coupon_code", "column_type": "VARCHAR(20)", "column_remarks": "Promotion coupon code if applicable" },
+          { "column_name": "category_restriction", "column_type": "INT", "column_remarks": "Category ID if promotion is restricted" },
+          { "column_name": "created_by", "column_type": "INT", "column_remarks": "User ID of promotion creator" },
+          { "column_name": "created_at", "column_type": "TIMESTAMP", "column_remarks": "Creation timestamp" }
+        ],
+        "primary_key": ["promotion_id"],
+        "foreign_keys": [
+          { "column_name": "category_restriction", "references_table": "categories", "references_column": "category_id" },
+          { "column_name": "created_by", "references_table": "users", "references_column": "user_id" }
+        ]
+      },
+      {
+        "table_name": "shipping",
+        "columns": [
+          { "column_name": "shipping_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for shipping record" },
+          { "column_name": "order_id", "column_type": "INT", "column_remarks": "Foreign Key - Reference to order" },
+          { "column_name": "carrier", "column_type": "VARCHAR(50)", "column_remarks": "Shipping carrier name" },
+          { "column_name": "tracking_number", "column_type": "VARCHAR(100)", "column_remarks": "Shipping tracking number" },
+          { "column_name": "shipping_method", "column_type": "VARCHAR(50)", "column_remarks": "Method of shipping" },
+          { "column_name": "shipping_cost", "column_type": "DECIMAL(10,2)", "column_remarks": "Cost of shipping" },
+          { "column_name": "estimated_delivery", "column_type": "DATE", "column_remarks": "Estimated delivery date" },
+          { "column_name": "actual_delivery", "column_type": "DATE", "column_remarks": "Actual delivery date" },
+          { "column_name": "shipping_address_id", "column_type": "INT", "column_remarks": "Foreign Key - Reference to address" },
+          { "column_name": "package_weight", "column_type": "DECIMAL(8,2)", "column_remarks": "Weight of package in kg" },
+          { "column_name": "package_dimensions", "column_type": "VARCHAR(50)", "column_remarks": "Dimensions of package" },
+          { "column_name": "shipping_status", "column_type": "VARCHAR(20)", "column_remarks": "Current shipping status" },
+          { "column_name": "signature_required", "column_type": "BOOLEAN", "column_remarks": "Whether signature is required" },
+          { "column_name": "insurance_amount", "column_type": "DECIMAL(10,2)", "column_remarks": "Amount of shipping insurance" },
+          { "column_name": "notes", "column_type": "TEXT", "column_remarks": "Additional shipping notes" }
+        ],
+        "primary_key": ["shipping_id"],
+        "foreign_keys": [
+          { "column_name": "order_id", "references_table": "orders", "references_column": "order_id" },
+          { "column_name": "shipping_address_id", "references_table": "addresses", "references_column": "address_id" }
+        ]
+      },
+      {
+        "table_name": "customer_support_tickets",
+        "columns": [
+          { "column_name": "ticket_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for support ticket" },
+          { "column_name": "user_id", "column_type": "INT", "column_remarks": "Foreign Key - Reference to user" },
+          { "column_name": "order_id", "column_type": "INT", "column_remarks": "Foreign Key - Reference to order if applicable" },
+          { "column_name": "subject", "column_type": "VARCHAR(200)", "column_remarks": "Ticket subject" },
+          { "column_name": "description", "column_type": "TEXT", "column_remarks": "Detailed description of issue" },
+          { "column_name": "priority", "column_type": "VARCHAR(20)", "column_remarks": "Ticket priority level" },
+          { "column_name": "status", "column_type": "VARCHAR(20)", "column_remarks": "Current ticket status" },
+          { "column_name": "category", "column_type": "VARCHAR(50)", "column_remarks": "Support ticket category" },
+          { "column_name": "assigned_to", "column_type": "INT", "column_remarks": "Support agent ID" },
+          { "column_name": "created_at", "column_type": "TIMESTAMP", "column_remarks": "Ticket creation timestamp" },
+          { "column_name": "updated_at", "column_type": "TIMESTAMP", "column_remarks": "Last update timestamp" },
+          { "column_name": "resolved_at", "column_type": "TIMESTAMP", "column_remarks": "Resolution timestamp" },
+          { "column_name": "resolution_notes", "column_type": "TEXT", "column_remarks": "Notes about resolution" },
+          { "column_name": "satisfaction_rating", "column_type": "INT", "column_remarks": "Customer satisfaction rating" },
+          { "column_name": "feedback", "column_type": "TEXT", "column_remarks": "Customer feedback" }
+        ],
+        "primary_key": ["ticket_id"],
+        "foreign_keys": [
+          { "column_name": "user_id", "references_table": "users", "references_column": "user_id" },
+          { "column_name": "order_id", "references_table": "orders", "references_column": "order_id" }
+        ]
+      },
+      {
+        "table_name": "product_variants",
+        "columns": [
+          { "column_name": "variant_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for product variant" },
+          { "column_name": "product_id", "column_type": "INT", "column_remarks": "Foreign Key - Reference to main product" },
+          { "column_name": "sku", "column_type": "VARCHAR(50)", "column_remarks": "Stock keeping unit" },
+          { "column_name": "variant_name", "column_type": "VARCHAR(100)", "column_remarks": "Name of the variant" },
+          { "column_name": "color", "column_type": "VARCHAR(50)", "column_remarks": "Color variant if applicable" },
+          { "column_name": "size", "column_type": "VARCHAR(20)", "column_remarks": "Size variant if applicable" },
+          { "column_name": "weight", "column_type": "DECIMAL(8,2)", "column_remarks": "Weight in kg" },
+          { "column_name": "dimensions", "column_type": "VARCHAR(50)", "column_remarks": "Product dimensions" },
+          { "column_name": "price_adjustment", "column_type": "DECIMAL(10,2)", "column_remarks": "Price difference from base product" },
+          { "column_name": "inventory_count", "column_type": "INT", "column_remarks": "Current inventory level" },
+          { "column_name": "is_active", "column_type": "BOOLEAN", "column_remarks": "Whether variant is active" },
+          { "column_name": "image_url", "column_type": "VARCHAR(255)", "column_remarks": "URL to variant image" },
+          { "column_name": "barcode", "column_type": "VARCHAR(50)", "column_remarks": "Variant barcode" },
+          { "column_name": "created_at", "column_type": "TIMESTAMP", "column_remarks": "Creation timestamp" },
+          { "column_name": "updated_at", "column_type": "TIMESTAMP", "column_remarks": "Last update timestamp" }
+        ],
+        "primary_key": ["variant_id"],
+        "foreign_keys": [
+          { "column_name": "product_id", "references_table": "products", "references_column": "product_id" }
+        ]
+      },
+      {
+        "table_name": "warehouses",
+        "columns": [
+          { "column_name": "warehouse_id", "column_type": "INT", "column_remarks": "Primary Key - Unique identifier for warehouse" },
+          { "column_name": "warehouse_name", "column_type": "VARCHAR(100)", "column_remarks": "Name of the warehouse" },
+          { "column_name": "address_line1", "column_type": "VARCHAR(100)", "column_remarks": "Street address line 1" },
+          { "column_name": "address_line2", "column_type": "VARCHAR(100)", "column_remarks": "Street address line 2" },
+          { "column_name": "city", "column_type": "VARCHAR(50)", "column_remarks": "City location" },
+          { "column_name": "state", "column_type": "VARCHAR(50)", "column_remarks": "State/province location" },
+          { "column_name": "country", "column_type": "VARCHAR(50)", "column_remarks": "Country location" },
+          { "column_name": "zip_code", "column_type": "VARCHAR(20)", "column_remarks": "Postal/zip code" },
+          { "column_name": "phone_number", "column_type": "VARCHAR(20)", "column_remarks": "Contact phone number" },
+          { "column_name": "email", "column_type": "VARCHAR(100)", "column_remarks": "Contact email" },
+          { "column_name": "manager_id", "column_type": "INT", "column_remarks": "ID of warehouse manager" },
+          { "column_name": "storage_capacity", "column_type": "INT", "column_remarks": "Total storage capacity in cubic meters" },
+          { "column_name": "is_active", "column_type": "BOOLEAN", "column_remarks": "Whether warehouse is active" },
+          { "column_name": "operating_hours", "column_type": "VARCHAR(100)", "column_remarks": "Regular operating hours" },
+          { "column_name": "notes", "column_type": "TEXT", "column_remarks": "Additional warehouse notes" }
+        ],
+        "primary_key": ["warehouse_id"]
+      }
+    ]
+  }

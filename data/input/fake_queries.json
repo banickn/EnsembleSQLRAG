@@ -1,0 +1,334 @@
+[
+    {
+      "query": "SELECT * FROM users;",
+      "user": "admin",
+      "timestamp": "2024-11-17T09:00:00Z",
+      "tables": ["users"]
+    },
+    {
+      "query": "SELECT username, email FROM users WHERE user_id = 1;",
+      "user": "admin",
+      "timestamp": "2024-11-17T09:10:00Z",
+      "tables": ["users"]
+    },
+    {
+      "query": "SELECT product_name, price FROM products WHERE price > 100;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T09:15:00Z",
+      "tables": ["products"]
+    },
+    {
+      "query": "SELECT * FROM orders WHERE user_id = 3;",
+      "user": "manager",
+      "timestamp": "2024-11-17T09:25:00Z",
+      "tables": ["orders"]
+    },
+    {
+      "query": "SELECT order_id, total_amount FROM orders;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T09:30:00Z",
+      "tables": ["orders"]
+    },
+    {
+      "query": "SELECT order_item_id, quantity, subtotal FROM order_items WHERE order_id = 15;",
+      "user": "manager",
+      "timestamp": "2024-11-17T09:35:00Z",
+      "tables": ["order_items"]
+    },
+    {
+      "query": "SELECT * FROM categories;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T09:40:00Z",
+      "tables": ["categories"]
+    },
+    {
+      "query": "SELECT category_name FROM categories WHERE category_id = 2;",
+      "user": "admin",
+      "timestamp": "2024-11-17T09:45:00Z",
+      "tables": ["categories"]
+    },
+    {
+      "query": "SELECT user_id, city FROM addresses WHERE state = 'California';",
+      "user": "analyst",
+      "timestamp": "2024-11-17T09:50:00Z",
+      "tables": ["addresses"]
+    },
+    {
+      "query": "SELECT rating, review_text FROM reviews WHERE product_id = 7;",
+      "user": "manager",
+      "timestamp": "2024-11-17T09:55:00Z",
+      "tables": ["reviews"]
+    },
+    {
+      "query": "SELECT * FROM payment_methods WHERE user_id = 5;",
+      "user": "admin",
+      "timestamp": "2024-11-17T10:00:00Z",
+      "tables": ["payment_methods"]
+    },
+    {
+      "query": "SELECT product_name, category_id FROM product_categories;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T10:05:00Z",
+      "tables": ["product_categories"]
+    },
+    {
+      "query": "SELECT COUNT(*) FROM orders WHERE total_amount > 500;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T10:10:00Z",
+      "tables": ["orders"]
+    },
+    {
+      "query": "SELECT user_id, created_at FROM users ORDER BY created_at DESC;",
+      "user": "manager",
+      "timestamp": "2024-11-17T10:15:00Z",
+      "tables": ["users"]
+    },
+    {
+      "query": "SELECT AVG(price) AS avg_price FROM products;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T10:20:00Z",
+      "tables": ["products"]
+    },
+    {
+      "query": "SELECT * FROM orders WHERE order_date BETWEEN '2024-01-01' AND '2024-12-31';",
+      "user": "admin",
+      "timestamp": "2024-11-17T10:25:00Z",
+      "tables": ["orders"]
+    },
+    {
+      "query": "SELECT COUNT(*) FROM reviews WHERE rating >= 4.0;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T10:30:00Z",
+      "tables": ["reviews"]
+    },
+    {
+      "query": "SELECT address_id, user_id, zip_code FROM addresses;",
+      "user": "manager",
+      "timestamp": "2024-11-17T10:35:00Z",
+      "tables": ["addresses"]
+    },
+    {
+      "query": "SELECT category_name, COUNT(*) AS product_count FROM product_categories GROUP BY category_name;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T10:40:00Z",
+      "tables": ["product_categories"]
+    },
+    {
+      "query": "SELECT * FROM users WHERE email LIKE '%example.com';",
+      "user": "admin",
+      "timestamp": "2024-11-17T10:45:00Z",
+      "tables": ["users"]
+    },
+    {
+      "query": "SELECT city, COUNT(*) FROM addresses GROUP BY city;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T10:50:00Z",
+      "tables": ["addresses"]
+    },
+    {
+      "query": "SELECT DISTINCT state FROM addresses;",
+      "user": "manager",
+      "timestamp": "2024-11-17T10:55:00Z",
+      "tables": ["addresses"]
+    },
+    {
+      "query": "SELECT user_id, COUNT(*) AS order_count FROM orders GROUP BY user_id HAVING order_count > 5;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T11:00:00Z",
+      "tables": ["orders"]
+    },
+    {
+      "query": "SELECT product_name, price FROM products ORDER BY price DESC;",
+      "user": "admin",
+      "timestamp": "2024-11-17T11:05:00Z",
+      "tables": ["products"]
+    },
+    {
+      "query": "SELECT MAX(rating) AS highest_rating, product_id FROM reviews GROUP BY product_id;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T11:10:00Z",
+      "tables": ["reviews"] 
+    },
+    {
+      "query": "SELECT user_id FROM orders WHERE total_amount > 1000;",
+      "user": "manager",
+      "timestamp": "2024-11-17T11:15:00Z",
+      "tables": ["orders"]
+    },
+    {
+      "query": "SELECT * FROM payment_methods;",
+      "user": "admin",
+      "timestamp": "2024-11-17T11:20:00Z",
+      "tables": ["payment_methods"]
+    },
+    {
+      "query": "SELECT * FROM order_items WHERE subtotal > 500;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T11:25:00Z",
+      "tables": ["order_items"]
+    },
+    {
+      "query": "SELECT product_name, AVG(rating) AS average_rating FROM reviews JOIN products ON reviews.product_id = products.product_id GROUP BY product_name;",
+      "user": "analyst",
+      "timestamp": "2024-11-17T11:30:00Z",
+      "tables": ["reviews", "products"]
+    },
+    {
+      "query": "SELECT product_id, COUNT(*) FROM order_items GROUP BY product_id;",
+      "user": "manager",
+      "timestamp": "2024-11-17T11:35:00Z",
+      "tables": ["order_items"]
+    },
+        {
+          "query": "WITH RecentOrders AS (SELECT order_id, user_id, order_date FROM orders WHERE order_date > '2024-01-01') SELECT RO.order_id, U.username FROM RecentOrders RO JOIN users U ON RO.user_id = U.user_id;",
+          "user": "analyst",
+          "timestamp": "2024-11-17T11:40:00Z",
+          "tables": ["orders", "users"]
+        },
+        {
+          "query": "SELECT product_id, COUNT(*) AS order_count, SUM(quantity) OVER (PARTITION BY product_id) AS total_quantity FROM order_items GROUP BY product_id;",
+          "user": "manager",
+          "timestamp": "2024-11-17T11:45:00Z",
+          "tables": ["order_items"]
+        },
+        {
+          "query": "WITH TotalSpent AS (SELECT user_id, SUM(total_amount) AS total_spent FROM orders GROUP BY user_id) SELECT U.username, TS.total_spent FROM TotalSpent TS JOIN users U ON TS.user_id = U.user_id WHERE total_spent > 1000;",
+          "user": "analyst",
+          "timestamp": "2024-11-17T11:50:00Z",
+          "tables": ["orders", "users"]
+        },
+        {
+          "query": "SELECT C.category_name, P.product_name, COUNT(*) AS product_count FROM product_categories PC JOIN products P ON PC.product_id = P.product_id JOIN categories C ON PC.category_id = C.category_id GROUP BY C.category_name, P.product_name HAVING COUNT(*) > 10;",
+          "user": "admin",
+          "timestamp": "2024-11-17T11:55:00Z",
+          "tables": ["product_categories", "products", "categories"]
+        },
+        {
+          "query": "SELECT user_id, order_date, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY order_date DESC) AS recent_order_rank FROM orders;",
+          "user": "manager",
+          "timestamp": "2024-11-17T12:00:00Z",
+          "tables": ["orders"]
+        },
+        {
+          "query": "WITH CategorySummary AS (SELECT category_id, COUNT(product_id) AS product_count FROM product_categories GROUP BY category_id) SELECT C.category_name, CS.product_count FROM CategorySummary CS JOIN categories C ON CS.category_id = C.category_id WHERE product_count > 5;",
+          "user": "analyst",
+          "timestamp": "2024-11-17T12:05:00Z",
+          "tables": ["product_categories", "categories"]
+        },
+        {
+          "query": "SELECT O.order_id, U.username, SUM(OI.subtotal) AS total_order_value FROM orders O JOIN users U ON O.user_id = U.user_id JOIN order_items OI ON O.order_id = OI.order_id GROUP BY O.order_id, U.username ORDER BY total_order_value DESC;",
+          "user": "manager",
+          "timestamp": "2024-11-17T12:10:00Z",
+          "tables": ["orders", "users", "order_items"]
+        },
+        {
+          "query": "WITH AddressCount AS (SELECT state, COUNT(address_id) AS address_count FROM addresses GROUP BY state) SELECT state, address_count, RANK() OVER (ORDER BY address_count DESC) AS rank_by_state FROM AddressCount;",
+          "user": "admin",
+          "timestamp": "2024-11-17T12:15:00Z",
+          "tables": ["addresses"]
+        },
+        {
+          "query": "SELECT P.product_name, AVG(R.rating) AS average_rating FROM products P JOIN reviews R ON P.product_id = R.product_id GROUP BY P.product_name HAVING AVG(R.rating) >= 4.5;",
+          "user": "analyst",
+          "timestamp": "2024-11-17T12:20:00Z",
+          "tables": ["products", "reviews"]
+        },
+        {
+          "query": "WITH ActiveUsers AS (SELECT user_id, COUNT(order_id) AS order_count FROM orders WHERE order_date >= '2024-01-01' GROUP BY user_id) SELECT U.username, AU.order_count FROM ActiveUsers AU JOIN users U ON AU.user_id = U.user_id WHERE AU.order_count > 5;",
+          "user": "manager",
+          "timestamp": "2024-11-17T12:25:00Z",
+          "tables": ["orders", "users"]
+        },
+        {
+          "query": "SELECT user_id, SUM(total_amount) AS total_spent, RANK() OVER (ORDER BY SUM(total_amount) DESC) AS rank_by_spent FROM orders GROUP BY user_id;",
+          "user": "analyst",
+          "timestamp": "2024-11-17T12:30:00Z",
+          "tables": ["orders"]
+        },
+        {
+          "query": "WITH TopProducts AS (SELECT product_id, SUM(subtotal) AS total_revenue FROM order_items GROUP BY product_id ORDER BY total_revenue DESC LIMIT 5) SELECT TP.product_id, P.product_name, TP.total_revenue FROM TopProducts TP JOIN products P ON TP.product_id = P.product_id;",
+          "user": "admin",
+          "timestamp": "2024-11-17T12:35:00Z",
+          "tables": ["order_items", "products"]
+        },
+        {
+          "query": "SELECT O.order_id, U.username, OI.product_id, OI.quantity FROM orders O JOIN users U ON O.user_id = U.user_id JOIN order_items OI ON O.order_id = OI.order_id WHERE O.order_date > '2024-01-01' AND U.user_id = 2;",
+          "user": "manager",
+          "timestamp": "2024-11-17T12:40:00Z",
+          "tables": ["orders", "users", "order_items"]
+        },
+        {
+          "query": "SELECT P.product_name, C.category_name, COUNT(*) AS review_count FROM reviews R JOIN products P ON R.product_id = P.product_id JOIN product_categories PC ON P.product_id = PC.product_id JOIN categories C ON PC.category_id = C.category_id GROUP BY P.product_name, C.category_name ORDER BY review_count DESC;",
+          "user": "analyst",
+          "timestamp": "2024-11-17T12:45:00Z",
+          "tables": ["reviews", "products", "product_categories"]
+        },
+        {
+          "query": "WITH RecentReviews AS (SELECT product_id, rating, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY created_at DESC) AS recent_rank FROM reviews) SELECT RR.product_id, P.product_name, RR.rating FROM RecentReviews RR JOIN products P ON RR.product_id = P.product_id WHERE recent_rank = 1;",
+          "user": "admin",
+          "timestamp": "2024-11-17T12:50:00Z",
+          "tables": ["reviews", "products"]
+        },
+        {
+            "query": "WITH InventoryStatus AS (SELECT warehouse_id, COUNT(*) as low_stock_items FROM inventory WHERE quantity_available <= minimum_threshold GROUP BY warehouse_id) SELECT w.warehouse_name, w.manager_id, w.storage_capacity, w.city, w.state, w.operating_hours, i.low_stock_items, w.phone_number, w.email, RANK() OVER (ORDER BY i.low_stock_items DESC) as critical_warehouse_rank FROM warehouses w JOIN InventoryStatus i ON w.warehouse_id = i.warehouse_id;",
+            "user": "analyst",
+            "timestamp": "2024-11-18T09:00:00Z",
+            "tables": ["inventory", "warehouses"]
+          },
+          {
+            "query": "WITH PromotionEffectiveness AS (SELECT p.promotion_id, p.promotion_name, p.discount_type, p.discount_value, p.start_date, p.end_date, p.usage_limit, p.current_usage, o.total_amount, c.category_name, DENSE_RANK() OVER (PARTITION BY p.discount_type ORDER BY o.total_amount DESC) as promotion_rank FROM promotions p JOIN orders o ON o.order_date BETWEEN p.start_date AND p.end_date JOIN categories c ON p.category_restriction = c.category_id) SELECT * FROM PromotionEffectiveness WHERE promotion_rank <= 5;",
+            "user": "manager",
+            "timestamp": "2024-11-18T09:15:00Z",
+            "tables": ["promotions", "orders", "categories"]
+          },
+          {
+            "query": "SELECT s.shipping_id, s.carrier, s.tracking_number, s.shipping_method, s.estimated_delivery, s.actual_delivery, s.shipping_cost, s.package_weight, o.order_id, o.total_amount, a.city, a.state, CASE WHEN actual_delivery <= estimated_delivery THEN 'On Time' ELSE 'Delayed' END as delivery_status FROM shipping s JOIN orders o ON s.order_id = o.order_id JOIN addresses a ON s.shipping_address_id = a.address_id WHERE s.shipping_status = 'Delivered';",
+            "user": "admin",
+            "timestamp": "2024-11-18T09:30:00Z",
+            "tables": ["shipping", "orders", "addresses"]
+          },
+          {
+            "query": "WITH SupportMetrics AS (SELECT t.assigned_to, t.priority, t.status, t.category, AVG(EXTRACT(EPOCH FROM (t.resolved_at - t.created_at))/3600) as avg_resolution_hours, COUNT(*) as ticket_count, AVG(t.satisfaction_rating) as avg_satisfaction FROM customer_support_tickets t WHERE t.resolved_at IS NOT NULL GROUP BY t.assigned_to, t.priority, t.status, t.category) SELECT *, RANK() OVER (PARTITION BY priority ORDER BY avg_satisfaction DESC) as performance_rank FROM SupportMetrics;",
+            "user": "manager",
+            "timestamp": "2024-11-18T09:45:00Z",
+            "tables": ["customer_support_tickets"]
+          },
+          {
+            "query": "SELECT pv.variant_id, pv.product_id, pv.sku, pv.variant_name, pv.color, pv.size, pv.price_adjustment, pv.inventory_count, p.product_name, p.price + pv.price_adjustment as final_price, w.warehouse_name, i.quantity_available FROM product_variants pv JOIN products p ON pv.product_id = p.product_id JOIN inventory i ON pv.variant_id = i.product_id JOIN warehouses w ON i.warehouse_id = w.warehouse_id WHERE pv.is_active = true;",
+            "user": "analyst",
+            "timestamp": "2024-11-18T10:00:00Z",
+            "tables": ["product_variants", "products", "inventory", "warehouses"]
+          },
+          {
+            "query": "WITH WarehouseCapacity AS (SELECT w.warehouse_id, w.warehouse_name, w.storage_capacity, SUM(i.quantity_available) as total_items, (SUM(i.quantity_available)::float / w.storage_capacity * 100) as capacity_used_percent FROM warehouses w JOIN inventory i ON w.warehouse_id = i.warehouse_id GROUP BY w.warehouse_id, w.warehouse_name, w.storage_capacity) SELECT *, FIRST_VALUE(warehouse_name) OVER (ORDER BY capacity_used_percent DESC) as most_utilized_warehouse FROM WarehouseCapacity;",
+            "user": "admin",
+            "timestamp": "2024-11-18T10:15:00Z",
+            "tables": ["warehouses", "inventory"]
+          },
+          {
+            "query": "SELECT w.wishlist_id, w.wishlist_name, w.is_public, w.created_at, u.username, p.product_name, p.price, pv.variant_name, pv.color, pv.size, i.quantity_available FROM wish_lists w JOIN users u ON w.user_id = u.user_id JOIN products p ON w.product_id = p.product_id LEFT JOIN product_variants pv ON p.product_id = pv.product_id LEFT JOIN inventory i ON p.product_id = i.product_id;",
+            "user": "analyst",
+            "timestamp": "2024-11-18T10:30:00Z",
+            "tables": ["wish_lists", "users", "products", "product_variants", "inventory"]
+          },
+          {
+            "query": "WITH ProductPerformance AS (SELECT p.product_id, p.product_name, COUNT(DISTINCT o.order_id) as order_count, SUM(oi.quantity) as total_units_sold, SUM(oi.subtotal) as total_revenue, AVG(r.rating) as avg_rating FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id LEFT JOIN reviews r ON p.product_id = r.product_id GROUP BY p.product_id, p.product_name) SELECT *, NTILE(4) OVER (ORDER BY total_revenue DESC) as revenue_quartile FROM ProductPerformance;",
+            "user": "manager",
+            "timestamp": "2024-11-18T10:45:00Z",
+            "tables": ["products", "order_items", "orders", "reviews"]
+          },
+          {
+            "query": "SELECT t.ticket_id, t.subject, t.priority, t.status, t.category, t.created_at, t.resolved_at, u.username, o.order_id, o.total_amount, p.product_name FROM customer_support_tickets t JOIN users u ON t.user_id = u.user_id LEFT JOIN orders o ON t.order_id = o.order_id LEFT JOIN order_items oi ON o.order_id = oi.order_id LEFT JOIN products p ON oi.product_id = p.product_id WHERE t.status = 'Open' AND t.priority = 'High';",
+            "user": "admin",
+            "timestamp": "2024-11-18T11:00:00Z",
+            "tables": ["customer_support_tickets", "users", "orders", "order_items", "products"]
+          },
+          {
+            "query": "WITH ShippingAnalysis AS (SELECT s.carrier, s.shipping_method, COUNT(*) as shipment_count, AVG(s.shipping_cost) as avg_cost, AVG(CASE WHEN s.actual_delivery <= s.estimated_delivery THEN 1 ELSE 0 END) as on_time_delivery_rate FROM shipping s WHERE s.shipping_status = 'Delivered' GROUP BY s.carrier, s.shipping_method) SELECT *, RANK() OVER (ORDER BY on_time_delivery_rate DESC, avg_cost ASC) as carrier_rank FROM ShippingAnalysis;",
+            "user": "analyst",
+            "timestamp": "2024-11-18T11:15:00Z",
+            "tables": ["shipping"]
+          }
+
+  ]
+
