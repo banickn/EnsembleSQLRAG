@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from RAG.MetadataRAG import MetadataRAG
 from RAG.QuerydataRAG import QuerydataRAG
+from RAG.Reranker import Reranker
 
 
 def get_sql_recommendations(prompt: str) -> str:
@@ -102,20 +103,14 @@ def init_meta_rag(keywords: str):
     meta_rag = MetadataRAG()
     # # # Load metadata from JSON file
     metadata = meta_rag.load_json_metadata("data/input/fake_columns.json")
-    # print(metadata)
     # # # Add metadata to the RAG system
     meta_rag.add_data(metadata)
 
     meta_rag.save_index("metadata_rag")
-    # meta_rag.load_index("metadata_rag")
+    meta_rag.load_index("metadata_rag")
     for query, weights in keywords:
-        print(f"\nQuery: {query}")
-        if weights:
-            print("Custom weights:", weights)
-        print("-" * 50)
         tables = []
         results = meta_rag.search(query, k=15, custom_weights=weights)
-        # print(results)
         scoring_columns = []
         for meta, score in results:
             print(f"Score: {score:.3f}")
@@ -143,21 +138,21 @@ def init_query_rag(keywords: list):
     query_rag.add_data(querydata)
 
     query_rag.save_index("querydata_rag")
-    # query_rag.load_index("metadata_rag")
+    query_rag.load_index("querydata_rag")
+    # Multi Query: Different Perspectives
+
     for query, weights in keywords:
-        print(f"\nQuery: {query}")
-        if weights:
-            print("Custom weights:", weights)
-        print("-" * 50)
         tables = []
         results = query_rag.search(query, k=15, custom_weights=weights)
         # print(results)
         scoring_queries = []
+        print(results)
         for query, score in results:
-            print(f"Score: {score:.3f}")
-            print(f"Query: {query.query}")
-            print(f"User: {query.user}")
-            print(f"Tables: {query.tables}")
+            print(query)
+            # print(f"Score: {score:.3f}")
+            # print(f"Query: {query.query}")
+            # print(f"User: {query.user}")
+            # print(f"Tables: {query.tables}")
             print("-" * 30)
             retrieval = {"query": query.query,
                          "score": score, "user": query.user, "tables": query.tables}
@@ -178,9 +173,21 @@ def init_query_rag(keywords: list):
 def main():
     # Initialize RAG system
     load_dotenv()
+    reranker = Reranker()
     query = "shipping best carrier performance  top5"
     genai.configure(api_key=os.getenv("gemini_api_key"))
-    # init_meta_rag(["address state user email reviews rating"])
+    multiquestion_prompt = f"""You are an AI language model assistant. Your task is to generate five
+    different versions of the given user question to retrieve relevant documents from a vector
+    database. By generating multiple perspectives on the user question, your goal is to help
+    the user overcome some of the limitations of the distance-based similarity search.
+    Provide these alternative questions each on a new line. Original question: {query}"""
+
+    model = genai.GenerativeModel(model_name='gemini-1.5-flash')
+    response = model.generate_content(multiquestion_prompt)
+    print(response.text)
+    rewritten_query = response.text
+    # answer_list = [line for line in response.text.splitlines() if line.strip()]
+    # print(answer_list)
     scoring_query, tables_query = init_query_rag([
         (query, {  # Emphasize column names
             'user': 0.0,
@@ -189,6 +196,7 @@ def main():
         }),
     ]
     )
+    print(scoring_query)
     scoring_meta, tables_meta = init_meta_rag([
         (query, {  # Emphasize column names
             'name': 0.6,
@@ -198,105 +206,115 @@ def main():
         }),
     ]
     )
+    # Rerank results using ColBERT model
+    combined_results = scoring_meta + scoring_query
+    reranked_results = reranker.rerank(query, combined_results)
 
-    ensemble_prompt = f"""
-    You're a senior business intelligence engineer.
-    Your team is working on getting knowledge from a database. The user input the following keywords: '{query}'.
-    Based on this keywords we used metadata retrieval and got the following items: "{scoring_meta}".
-    Based on this keywords we also used historical queries and got the following items "{scoring_query}".
-    And the matching table schemas: {tables_meta}, {tables_query}.
-    Scoring from historical queries should be more important.
-    Please rerank the found items and get the best 10 results order by score.
-    """
-    rerank = get_rerank_recommendations(ensemble_prompt)
-    # table_schema = [obj for obj in metadata.get("metadata", []) if obj.get("table_name") == table_name]
-    prompt = f"""
+    print(combined_results, reranked_results)
+    # ensemble_prompt = f"""
+    # You're a senior business intelligence engineer.
+    # Your team is working on getting knowledge from a database. The user input the following keywords: '{query}'.
+    # Based on this keywords we used metadata retrieval and got the following items: "{scoring_meta}".
+    # Based on this keywords we also used historical queries and got the following items "{scoring_query}".
+    # And the matching table schemas: {tables_meta}, {tables_query}.
+    # Scoring from historical queries should be more important.
+    # Please rerank the found items and get the best 10 results order by score.
+    # """
+    # # rerank = rerank_recommendations(
+    # #     query,
+    # #     scoring_meta,  # metadata results
+    # #     scoring_query  # query results
+    # # )
+    # rerank = get_rerank_recommendations(ensemble_prompt)
+    # # table_schema = [obj for obj in metadata.get(
+    # #     "metadata", []) if obj.get("table_name") == table_name]
+    # prompt = f"""
 
-        # SQL Query Generation Template
-        ## User Input Keywords
-        {query}
+    #     # SQL Query Generation Template
+    #     ## User Input Keywords
+    #     {query}
 
-        ## Reranked Context
-        {rerank}
+    #     ## Reranked Context
+    #     {rerank}
 
-        ## Schema Context
-        ```sql
-        {tables_meta}
-        {tables_query}
-        ```
+    #     ## Schema Context
+    #     ```sql
+    #     {tables_meta}
+    #     {tables_query}
+    #     ```
 
-        ## Query Requirements Template
-        Please provide the following information to generate an optimized SQL query:
+    #     ## Query Requirements Template
+    #     Please provide the following information to generate an optimized SQL query:
 
-        1. **Primary Objective**
-        - What is the main metric or insight you want to calculate based on the keywords?
-        - Example: "Find active users based on order frequency"
+    #     1. **Primary Objective**
+    #     - What is the main metric or insight you want to calculate based on the keywords?
+    #     - Example: "Find active users based on order frequency"
 
-        2. **Ranked Context**
-        - Use the given Reranked Context to construct the query
-        - Example: Examine reason and score for each item
+    #     2. **Ranked Context**
+    #     - Use the given Reranked Context to construct the query
+    #     - Example: Examine reason and score for each item
 
-        3. **Key Metrics**
-        - List specific metrics needed in the output
-        - Example: order count, total spend, average order value
+    #     3. **Key Metrics**
+    #     - List specific metrics needed in the output
+    #     - Example: order count, total spend, average order value
 
-        4. **Time Period**
-        - Specify the time range for the analysis
-        - Example: last 30 days, year-to-date, all time
+    #     4. **Time Period**
+    #     - Specify the time range for the analysis
+    #     - Example: last 30 days, year-to-date, all time
 
-        5. **Filtering Criteria**
-        - Any specific conditions to filter the data?
-        - Example: minimum order count, minimum spend
+    #     5. **Filtering Criteria**
+    #     - Any specific conditions to filter the data?
+    #     - Example: minimum order count, minimum spend
 
-        6. **Output Format**
-        - How should results be ordered/ranked?
-        - What's the desired limit of results?
+    #     6. **Output Format**
+    #     - How should results be ordered/ranked?
+    #     - What's the desired limit of results?
 
-        ## Example Query Request
-        ```
-        Keywords: active users orders rank
-        Primary Objective: Rank users by order activity
-        Time Period: Year-to-date (2024)
-        Metrics Needed: Username, order count, total spend
-        Filtering: Only users with at least 1 order
-        Ranking: By order count descending
-        ```
+    #     ## Example Query Request
+    #     ```
+    #     Keywords: active users orders rank
+    #     Primary Objective: Rank users by order activity
+    #     Time Period: Year-to-date (2024)
+    #     Metrics Needed: Username, order count, total spend
+    #     Filtering: Only users with at least 1 order
+    #     Ranking: By order count descending
+    #     ```
 
-        ## Generated Query Structure
-        ```sql
-        WITH UserMetrics AS (
-            SELECT
-                u.user_id,
-                u.username,
-                COUNT(DISTINCT o.order_id) as order_count,
-                SUM(o.total_amount) as total_spend
-            FROM users u
-            JOIN orders o ON u.user_id = o.user_id
-            WHERE o.order_date >= '2024-01-01'
-            GROUP BY u.user_id, u.username
-            HAVING order_count >= 1
-        )
-        SELECT
-            username,
-            order_count,
-            total_spend,
-            RANK() OVER (ORDER BY order_count DESC) as activity_rank
-        FROM UserMetrics
-        ORDER BY activity_rank;
-        ```
+    #     ## Generated Query Structure
+    #     ```sql
+    #     WITH UserMetrics AS (
+    #         SELECT
+    #             u.user_id,
+    #             u.username,
+    #             COUNT(DISTINCT o.order_id) as order_count,
+    #             SUM(o.total_amount) as total_spend
+    #         FROM users u
+    #         JOIN orders o ON u.user_id = o.user_id
+    #         WHERE o.order_date >= '2024-01-01'
+    #         GROUP BY u.user_id, u.username
+    #         HAVING order_count >= 1
+    #     )
+    #     SELECT
+    #         username,
+    #         order_count,
+    #         total_spend,
+    #         RANK() OVER (ORDER BY order_count DESC) as activity_rank
+    #     FROM UserMetrics
+    #     ORDER BY activity_rank;
+    #     ```
 
-        ## Best Practices
-        1. Use CTEs for complex queries to improve readability
-        2. Include appropriate JOINs based on foreign key relationships
-        3. Add specific WHERE clauses for time-based filtering
-        4. Use window functions for ranking when needed
-        5. Include HAVING clauses for aggregate filters
-        6. Specify ORDER BY for clear result presentation
+    #     ## Best Practices
+    #     1. Use CTEs for complex queries to improve readability
+    #     2. Include appropriate JOINs based on foreign key relationships
+    #     3. Add specific WHERE clauses for time-based filtering
+    #     4. Use window functions for ranking when needed
+    #     5. Include HAVING clauses for aggregate filters
+    #     6. Specify ORDER BY for clear result presentation
 
-    """
-    print("-" * 50)
-    print(prompt)
-    print(get_sql_recommendations(prompt))
+    # """
+    # print("-" * 50)
+    # print(prompt)
+    # print(get_sql_recommendations(prompt))
 
 
 if __name__ == "__main__":
